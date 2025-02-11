@@ -1049,8 +1049,8 @@ selectionBox.Color3 = Color3.new(0.46, 0.24, 0.76)
 local mouse = game.Players.LocalPlayer:GetMouse()
 local camera = workspace.CurrentCamera
 local modelToMove = nil
-local normalSpeed = 35
-local sprintSpeed = 300
+local normalSpeed = 100
+local sprintSpeed = 200
 local downwardSpeed = 10
 local upwardSpeed = downwardSpeed
 local isPartSelected = false
@@ -1365,7 +1365,7 @@ game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
     updateModelMovement(deltaTime)
 end)
 ]]
-local longneck = [[local longNeckEnabled = false -- Start with the feature disabled
+local longneck = [[local longNeckEnabled = false 
 
 local function setLongNeck(enabled)
     longNeckEnabled = enabled
@@ -1383,7 +1383,11 @@ local UserInputService = game:GetService("UserInputService")
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if input.KeyCode == Enum.KeyCode.Z and not gameProcessedEvent then
         setLongNeck(not longNeckEnabled)
-    end]]
+    end
+end)
+
+]]
+
 local FullBright = [[local Light = game:GetService("Lighting")
 
 function dofullbright()
