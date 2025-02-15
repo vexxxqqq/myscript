@@ -4,7 +4,7 @@ local ThemeManager = {} do
 	-- if not isfolder(ThemeManager.Folder) then makefolder(ThemeManager.Folder) end
 
 	ThemeManager.Library = nil
-    ThemeManager.BuiltInThemes = {
+ThemeManager.BuiltInThemes = {
     ['Default'] = { 1, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0d0d0d","AccentColor":"00ff00","BackgroundColor":"080808","OutlineColor":"141414"}') },
     ['Fatality'] = { 3, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0f0f0f","AccentColor":"0fd30f","BackgroundColor":"070707","OutlineColor":"0c0c0c"}') },
     ['Jester'] = { 4, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"101010","AccentColor":"1aff1a","BackgroundColor":"0a0a0a","OutlineColor":"171717"}') },
@@ -12,8 +12,8 @@ local ThemeManager = {} do
     ['Tokyo Night'] = { 6, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0a0a0a","AccentColor":"19ff19","BackgroundColor":"060606","OutlineColor":"0d0d0d"}') },
     ['Ubuntu'] = { 7, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0d0d0d","AccentColor":"17c217","BackgroundColor":"080808","OutlineColor":"141414"}') },
     ['Quartz'] = { 8, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0b0b0b","AccentColor":"22ff22","BackgroundColor":"070707","OutlineColor":"0f0f0f"}') },
+    ['LightBlue'] = { 9, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"d0eaff","AccentColor":"a3cfff","BackgroundColor":"f0f8ff","OutlineColor":"c0d9ff"}') }
 }
-
 	function ThemeManager:ApplyTheme(theme)
 		local customThemeData = self:GetCustomTheme(theme)
 		local data = customThemeData or self.BuiltInThemes[theme]
