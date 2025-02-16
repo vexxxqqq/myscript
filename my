@@ -1,3 +1,4 @@
+local TweenService = game:GetService("TweenService")
 local httpService = game:GetService('HttpService')
 local ThemeManager = {} do
 	ThemeManager.Folder = 'LinoriaLibSettings'
@@ -13,46 +14,40 @@ ThemeManager.BuiltInThemes = {}
 
 -- Цвета для неонового эффекта
 local neonColors = {
-    Color3.fromRGB(0, 255, 255),  -- Бирюзовый
-    Color3.fromRGB(0, 128, 255),  -- Голубой
-    Color3.fromRGB(0, 255, 128),  -- Мятный
-    Color3.fromRGB(0, 255, 64),   -- Ярко-зеленый
-    Color3.fromRGB(0, 255, 192),  -- Аквамарин
-    Color3.fromRGB(0, 192, 255)   -- Светло-синий
+    ['NeonBlueGreen'] = { 1, httpService:JSONDecode('{"FontColor":"00ffea","MainColor":"0a0a0a","AccentColor":"00ffd5","BackgroundColor":"050505","OutlineColor":"0d0d0d"}') },
+    ['NeonLightBlue'] = { 2, httpService:JSONDecode('{"FontColor":"a3cfff","MainColor":"0c0c0c","AccentColor":"80dfff","BackgroundColor":"060606","OutlineColor":"0f0f0f"}') }
 }
 
--- Функция для анимации неонового цвета
-local function AnimateNeonColor(themeName)
-    local theme = ThemeManager.BuiltInThemes[themeName]
-    local accentColor = Instance.new("Color3Value")
-    accentColor.Value = neonColors[1]
+local uiElements = {} -- Добавляй сюда свои UI элементы
+local currentThemeIndex = 1
+local themes = {"NeonBlueGreen", "NeonLightBlue"}
 
-    -- Функция для плавной смены цвета
-    local function TweenColor()
-        local nextColor = neonColors[math.random(1, #neonColors)]
-        local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-        local tween = TweenService:Create(accentColor, tweenInfo, {Value = nextColor})
-        tween:Play()
-        
-        tween.Completed:Connect(function()
-            TweenColor() -- Зацикливаем анимацию
-        end)
-    end
-
-    TweenColor()
-
-    -- Обновляем тему в реальном времени
-    game:GetService("RunService").RenderStepped:Connect(function()
-        theme[2].AccentColor = accentColor.Value:ToHex()
-    end)
+local function animateColors(element, property, endColor)
+    local tween = TweenService:Create(element, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {[property] = endColor})
+    tween:Play()
 end
 
--- Создаем темы с анимацией
-local themeNames = { 'Default', 'Fatality', 'Jester', 'Mint', 'Tokyo Night', 'Ubuntu', 'Quartz', 'LightBlue' }
+local function applyTheme(theme)
+    local themeData = ThemeManager.BuiltInThemes[theme][2]
+    for _, element in pairs(uiElements) do
+        if element:IsA("TextLabel") or element:IsA("TextButton") then
+            element.TextColor3 = Color3.fromHex(themeData.FontColor)
+            animateColors(element, "TextColor3", Color3.new(1, 1, 1))
+        elseif element:IsA("Frame") then
+            element.BackgroundColor3 = Color3.fromHex(themeData.BackgroundColor)
+            animateColors(element, "BackgroundColor3", Color3.new(0, 0, 0))
+        end
+    end
+end
 
-for i, name in pairs(themeNames) do
-    ThemeManager.BuiltInThemes[name] = { i, httpService:JSONDecode('{"FontColor":"c7c7c7","MainColor":"0d0d0d","AccentColor":"00ffff","BackgroundColor":"080808","OutlineColor":"141414"}') }
-    AnimateNeonColor(name)
+local function cycleThemes()
+    currentThemeIndex = currentThemeIndex % #themes + 1
+    applyTheme(themes[currentThemeIndex])
+end
+
+while true do
+    cycleThemes()
+    wait(3) -- Задержка перед сменой темы
 end
 }
 	function ThemeManager:ApplyTheme(theme)
